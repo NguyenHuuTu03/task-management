@@ -1,6 +1,8 @@
 const express = require("express");
 const databaseConfig = require("./config/database");
-const Task = require("./models/tasks.model");
+const routesV1 = require("./api/v1/routes/index.router");
+
+
 
 require("dotenv").config();
 
@@ -9,13 +11,10 @@ const port = process.env.PORT;
 
 
 databaseConfig.connect();
-app.get("/tasks", async (req, res) => {
-  const tasks = await Task.find({
-    deleted: false
-  });
-  console.log(tasks);
-  res.json(tasks);
-});
+
+// router
+routesV1(app);
+// end router
 
 app.listen(port, () => {
   console.log(`Hãy truy cập trang: http://localhost:${port}`);
