@@ -2,6 +2,7 @@ const express = require("express");
 const databaseConfig = require("./config/database");
 const routesV1 = require("./api/v1/routes/index.router");
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 
 require("dotenv").config();
@@ -9,6 +10,9 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT;
 
+// cors
+app.use(cors());
+// cors
 
 databaseConfig.connect();
 
