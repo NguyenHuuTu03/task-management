@@ -1,7 +1,7 @@
 const express = require("express");
 const databaseConfig = require("./config/database");
 const routesV1 = require("./api/v1/routes/index.router");
-
+const bodyParser = require('body-parser');
 
 
 require("dotenv").config();
@@ -11,6 +11,9 @@ const port = process.env.PORT;
 
 
 databaseConfig.connect();
+
+// parse application/json
+app.use(bodyParser.json());
 
 // router
 routesV1(app);

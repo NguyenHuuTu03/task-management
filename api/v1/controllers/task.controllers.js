@@ -2,6 +2,7 @@ const Task = require("../../../models/tasks.model");
 const paginationHelper = require("../../../helpers/pagination");
 const searchHelper = require("../../../helpers/search");
 
+
 // [GET] /api/v1/tasks/
 module.exports.index = async (req, res) => {
   const find = {
@@ -38,7 +39,6 @@ module.exports.index = async (req, res) => {
   res.json(tasks);
 }
 
-
 // [GET] /api/v1/tasks/detail/:id
 module.exports.detail = async (req, res) => {
   try {
@@ -49,5 +49,28 @@ module.exports.detail = async (req, res) => {
     res.json(tasks);
   } catch (error) {
     res.json("Không tìm thấy!");
+  }
+}
+
+// [PATCH] /api/v1/tasks/change-status/:id
+module.exports.changeStatus = async (req, res) => {
+
+  try {
+    const id = req.params.id;
+    const status = req.body.status;
+    const tasks = await Task.updateOne({
+      _id: id
+    }, {
+      status: status
+    });
+    res.json({
+      code: "200",
+      message: "Cập nhật trạng thái thành công!"
+    });
+  } catch (error) {
+    res.json({
+      code: "500",
+      message: "Cập nhật trạng thái thất bại!"
+    });
   }
 }
