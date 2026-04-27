@@ -9,7 +9,5 @@ router.patch("/change-multi", controller.changeMulti);
 router.post("/create", controller.create);
 router.patch("/edit/:id", controller.edit);
 router.delete("/delete/:id", controller.delete);
-router.post("/users/register", controller.register);
-router.post("/users/login", controller.login);
 
 module.exports = router;

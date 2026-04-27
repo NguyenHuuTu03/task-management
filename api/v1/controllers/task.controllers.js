@@ -1,8 +1,7 @@
 const Task = require("../../../models/tasks.model");
-const User = require("../../../models/user.model");
 const paginationHelper = require("../../../helpers/pagination");
 const searchHelper = require("../../../helpers/search");
-const md5 = require('md5');
+
 
 
 
@@ -190,60 +189,4 @@ module.exports.delete = async (req, res) => {
       message: "Xoá bản ghi thất bại!"
     });
   }
-}
-
-// [POST] /api/v1/tasks/users/register
-module.exports.register = async (req, res) => {
-  const exitsEmail = await User.findOne({
-    email: req.body.email,
-    deleted: false
-  });
-  if (exitsEmail) {
-    res.json({
-      code: "400",
-      message: "Email đã tồn tại"
-    });
-  } else {
-    req.body.password = md5(req.body.password);
-    const user = new User({
-      fullName: req.body.fullName,
-      email: req.body.email,
-      password: req.body.password
-    });
-    await user.save();
-    const tokenUser = res.cookie("tokenUser", user.tokenUser);
-    res.json({
-      code: "200",
-      message: "Đăng ký thành công!",
-      tokenUser: user.tokenUser
-    });
-  }
-}
-
-// [POST] /api/v1/tasks/users/login
-module.exports.login = async (req, res) => {
-  const exitsEmail = await User.findOne({
-    email: req.body.email,
-    deleted: false
-  });
-  if (!exitsEmail) {
-    res.json({
-      code: "400",
-      message: "Email không tồn tại!"
-    });
-    return
-  }
-  if (md5(req.body.password) != exitsEmail.password) {
-    res.json({
-      code: "400",
-      message: "Sai mật khẩu!"
-    });
-    return;
-  }
-  res.cookie("tokenUser", exitsEmail.tokenUser);
-  res.json({
-    code: "200",
-    message: "Đăng nhập thành công!",
-    tokenUser: exitsEmail.tokenUser
-  });
 }
