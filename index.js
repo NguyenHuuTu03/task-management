@@ -3,6 +3,7 @@ const databaseConfig = require("./config/database");
 const routesV1 = require("./api/v1/routes/index.router");
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 
 require("dotenv").config();
@@ -14,6 +15,9 @@ const port = process.env.PORT;
 app.use(cors());
 // cors
 
+// cookie-parser
+app.use(cookieParser());
+// End cookie-parser
 databaseConfig.connect();
 
 // parse application/json

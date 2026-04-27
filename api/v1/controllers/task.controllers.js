@@ -1,6 +1,9 @@
 const Task = require("../../../models/tasks.model");
+const User = require("../../../models/user.model");
 const paginationHelper = require("../../../helpers/pagination");
 const searchHelper = require("../../../helpers/search");
+const md5 = require('md5');
+
 
 
 // [GET] /api/v1/tasks/
@@ -185,6 +188,34 @@ module.exports.delete = async (req, res) => {
     res.json({
       code: "400",
       message: "Xoá bản ghi thất bại!"
+    });
+  }
+}
+
+// [PATCH] /api/v1/tasks/users/register
+module.exports.register = async (req, res) => {
+  const exitsEmail = await User.findOne({
+    email: req.body.email,
+    deleted: false
+  });
+  if (exitsEmail) {
+    res.json({
+      code: 200,
+      message: "Email đã tồn tại"
+    });
+  } else {
+    req.body.password = md5(req.body.password);
+    const user = new User({
+      fullName: req.body.fullName,
+      email: req.body.email,
+      password: req.body.password
+    });
+    await user.save();
+    const tokenUser = res.cookie("tokenUser", user.tokenUser);
+    res.json({
+      code: 200,
+      message: "Đăng ký thành công!",
+      tokenUser: user.tokenUser
     });
   }
 }
