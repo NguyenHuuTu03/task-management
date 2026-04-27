@@ -148,3 +148,17 @@ module.exports.reset = async (req, res) => {
     tokenUser: tokenUser
   });
 }
+
+// [GET] /api/v1/users/detail
+module.exports.detail = async (req, res) => {
+  const tokenUser = req.cookies.tokenUser;
+  const user = await User.findOne({
+    tokenUser: tokenUser
+  }).select("-password -tokenUser");
+
+  res.json({
+    code: "200",
+    message: "Thành công!",
+    user: user
+  });
+}
