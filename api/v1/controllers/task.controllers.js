@@ -8,6 +8,13 @@ const searchHelper = require("../../../helpers/search");
 // [GET] /api/v1/tasks/
 module.exports.index = async (req, res) => {
   const find = {
+    $or: [{
+        createdBy: req.user.id
+      },
+      {
+        listUser: req.user.id
+      }
+    ],
     deleted: false
   };
   const status = req.query.status;
