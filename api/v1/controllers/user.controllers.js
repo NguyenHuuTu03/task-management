@@ -21,7 +21,8 @@ module.exports.register = async (req, res) => {
     const user = new User({
       fullName: req.body.fullName,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      tokenUser: generateHelpers.generateRandomNumber(20)
     });
     await user.save();
     const tokenUser = res.cookie("tokenUser", user.tokenUser);
@@ -151,14 +152,9 @@ module.exports.reset = async (req, res) => {
 
 // [GET] /api/v1/users/detail
 module.exports.detail = async (req, res) => {
-  const tokenUser = req.cookies.tokenUser;
-  const user = await User.findOne({
-    tokenUser: tokenUser
-  }).select("-password -tokenUser");
-
   res.json({
     code: "200",
     message: "Thành công!",
-    user: user
+    info: req.user
   });
 }
